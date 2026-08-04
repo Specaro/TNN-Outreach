@@ -7,17 +7,22 @@ const { getTemplate, TEMPLATE_META } = require('../templates/emailTemplates');
 function getSmtpConfig(db) {
   const rows = db.prepare('SELECT key, value FROM settings').all();
   const s = Object.fromEntries(rows.map(r => [r.key, r.value]));
+
+  // Environment variables take priority over database settings
   return {
-    host: s.smtp_host || 'smtp.gmail.com',
-    port: parseInt(s.smtp_port || '587'),
-    secure: s.smtp_secure === 'true',
-    auth: { user: s.smtp_user || '', pass: s.smtp_pass || '' },
-    fromName: s.from_name || 'TNN Staffing Solutions',
-    fromEmail: s.from_email || s.smtp_user || '',
-    companyName: s.company_name || 'TNN Staffing Solutions',
-    companyPhone: s.company_phone || '',
-    companyWebsite: s.company_website || '',
-    companyTagline: s.company_tagline || 'Your Trusted Partner in Healthcare Staffing',
+    host: process.env.SMTP_HOST || s.smtp_host || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || s.smtp_port || '587'),
+    secure: (process.env.SMTP_SECURE || s.smtp_secure) === 'true',
+    auth: {
+      user: process.env.SMTP_USER || s.smtp_user || '',
+      pass: process.env.SMTP_PASS || s.smtp_pass || '',
+    },
+    fromName: process.env.EMAIL_FROM_NAME || s.from_name || 'Total Nurses Network',
+    fromEmail: process.env.EMAIL_FROM_ADDRESS || s.from_email || process.env.SMTP_USER || s.smtp_user || '',
+    companyName: s.company_name || 'Total Nurses Network',
+    companyPhone: s.company_phone || '1.800.510.8802',
+    companyWebsite: s.company_website || 'https://totalnursesnetwork.com',
+    companyTagline: s.company_tagline || 'Trusted by Healthcare Professionals',
   };
 }
 
@@ -59,7 +64,7 @@ router.post('/test-connection', async (req, res) => {
   const config = getSmtpConfig(db);
 
   if (!config.auth.user || !config.auth.pass) {
-    return res.status(400).json({ success: false, error: 'SMTP credentials not configured. Please update Settings first.' });
+    return res.status(400).json({ success: false, error: 'SMTP credentials not configured. Please set them in Railway Variables or Settings.' });
   }
 
   try {
@@ -79,7 +84,7 @@ router.post('/send-test', async (req, res) => {
 
   const config = getSmtpConfig(db);
   if (!config.auth.user || !config.auth.pass) {
-    return res.status(400).json({ error: 'SMTP credentials not configured. Please update Settings first.' });
+    return res.status(400).json({ error: 'SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS in Railway Variables.' });
   }
 
   const html = getTemplate('introduction', {
@@ -113,10 +118,9 @@ router.post('/send-campaign/:campaignId', async (req, res) => {
 
   const config = getSmtpConfig(db);
   if (!config.auth.user || !config.auth.pass) {
-    return res.status(400).json({ error: 'SMTP credentials not configured. Please update Settings first.' });
+    return res.status(400).json({ error: 'SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS in Railway Variables.' });
   }
 
-  // Determine recipients
   let contacts = [];
   if (campaign.recipient_type === 'all') {
     contacts = db.prepare("SELECT * FROM contacts WHERE active=1 AND email != '' AND email IS NOT NULL").all();
@@ -172,23 +176,15 @@ router.post('/send-campaign/:campaignId', async (req, res) => {
       results.push({ contact: contact.name, email: contact.email, status: 'failed', error: err.message });
     }
 
-    // Small delay to avoid rate limiting
     await new Promise(r => setTimeout(r, 200));
   }
 
-  // Update campaign status
   db.prepare(`
     UPDATE campaigns SET status='sent', recipients_count=?, sent_count=?, failed_count=?, sent_at=CURRENT_TIMESTAMP
     WHERE id=?
   `).run(contacts.length, sentCount, failedCount, campaign.id);
 
-  res.json({
-    success: true,
-    total: contacts.length,
-    sent: sentCount,
-    failed: failedCount,
-    results,
-  });
+  res.json({ success: true, total: contacts.length, sent: sentCount, failed: failedCount, results });
 });
 
 module.exports = router;
