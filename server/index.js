@@ -30,7 +30,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(clientDist, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🏥 TNN Outreach Server running on http://localhost:${PORT}`);
-  console.log(`📧 API available at http://localhost:${PORT}/api\n`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`TNN Outreach Server running on port ${PORT}`);
 });
