@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 import Sidebar from './components/Sidebar'
@@ -13,6 +13,7 @@ import Login from './pages/Login'
 export default function App() {
   const [authed, setAuthed] = useState(false)
   const [checking, setChecking] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const token = localStorage.getItem('tnn_token')
@@ -41,7 +42,7 @@ export default function App() {
     return (
       <>
         <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-        <Login onLogin={() => setAuthed(true)} />
+        <Login onLogin={() => { setAuthed(true); navigate('/dashboard') }} />
       </>
     )
   }
