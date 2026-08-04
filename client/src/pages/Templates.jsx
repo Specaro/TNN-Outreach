@@ -76,11 +76,11 @@ export default function Templates() {
   }
 
   const colors = [
-    'from-blue-500 to-blue-600',
-    'from-purple-500 to-purple-600',
-    'from-indigo-500 to-indigo-600',
-    'from-emerald-500 to-teal-600',
-    'from-rose-500 to-pink-600',
+    'from-blue-800 to-blue-700',
+    'from-blue-600 to-blue-500',
+    'from-blue-700 to-blue-600',
+    'from-blue-900 to-blue-700',
+    'from-blue-500 to-blue-400',
   ]
 
   return (
