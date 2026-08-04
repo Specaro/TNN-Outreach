@@ -12,9 +12,9 @@ function getTemplate(templateId, data) {
 const baseStyles = `
   body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f0f4f8; }
   .wrapper { max-width: 620px; margin: 0 auto; background-color: #ffffff; }
-  .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); padding: 30px 40px; text-align: center; }
-  .header-logo-img { width: 120px; height: auto; display: block; margin: 0 auto 10px; }
-  .header-tagline { color: #93c5fd; font-size: 13px; margin: 6px 0 0; letter-spacing: 2px; text-transform: uppercase; }
+  .header { background: #ffffff; padding: 28px 40px 20px; text-align: center; border-bottom: 4px solid #2563eb; }
+  .header-logo-img { width: 150px; height: auto; display: block; margin: 0 auto; }
+  .header-tagline { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: #ffffff; font-size: 12px; margin: 0; letter-spacing: 2px; text-transform: uppercase; padding: 10px 40px; text-align: center; }
   .hero-banner { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); padding: 30px 40px; border-bottom: 3px solid #2563eb; }
   .hero-title { color: #1e3a5f; font-size: 24px; font-weight: 700; margin: 0 0 8px; line-height: 1.3; }
   .hero-subtitle { color: #3b82f6; font-size: 14px; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
@@ -55,8 +55,8 @@ function emailWrapper(content, companyName, companyTagline) {
 <div class="wrapper">
   <div class="header">
     <img src="https://i.imgur.com/fyIsumc.jpeg" alt="Total Nurses Network" class="header-logo-img" />
-    <p class="header-tagline">${companyTagline}</p>
   </div>
+  <p class="header-tagline">${companyTagline}</p>
   ${content}
   <div class="footer">
     <p class="footer-company">${companyName}</p>
