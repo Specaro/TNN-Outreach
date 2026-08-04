@@ -12,8 +12,8 @@ function getTemplate(templateId, data) {
 const baseStyles = `
   body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f0f4f8; }
   .wrapper { max-width: 620px; margin: 0 auto; background-color: #ffffff; }
-  .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); padding: 40px 40px 30px; text-align: center; }
-  .header-logo { color: #ffffff; font-size: 28px; font-weight: 800; letter-spacing: 1px; margin: 0; }
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); padding: 30px 40px; text-align: center; }
+  .header-logo-img { width: 120px; height: auto; display: block; margin: 0 auto 10px; }
   .header-tagline { color: #93c5fd; font-size: 13px; margin: 6px 0 0; letter-spacing: 2px; text-transform: uppercase; }
   .hero-banner { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); padding: 30px 40px; border-bottom: 3px solid #2563eb; }
   .hero-title { color: #1e3a5f; font-size: 24px; font-weight: 700; margin: 0 0 8px; line-height: 1.3; }
@@ -54,7 +54,7 @@ function emailWrapper(content, companyName, companyTagline) {
 <body>
 <div class="wrapper">
   <div class="header">
-    <p class="header-logo">${companyName}</p>
+    <img src="https://i.imgur.com/fyIsumc.jpeg" alt="Total Nurses Network" class="header-logo-img" />
     <p class="header-tagline">${companyTagline}</p>
   </div>
   ${content}
