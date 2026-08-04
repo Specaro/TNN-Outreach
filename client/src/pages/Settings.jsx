@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { Settings as SettingsIcon, Mail, Building2, CheckCircle, Loader2, Send } from 'lucide-react'
+import { Mail, Building2, CheckCircle, Loader2, Send, LogOut } from 'lucide-react'
 
 export default function Settings() {
   const [settings, setSettings] = useState(null)
@@ -186,6 +186,27 @@ export default function Settings() {
           <button onClick={handleSendTest} disabled={sendingTest} className="btn-primary flex-shrink-0">
             {sendingTest ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             {sendingTest ? 'Sending...' : 'Send Test'}
+          </button>
+        </div>
+      </div>
+
+      {/* Sign Out */}
+      <div className="card p-6 mt-6 border border-red-100">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-bold text-slate-800">Sign Out</h3>
+            <p className="text-sm text-slate-500 mt-0.5">You will be returned to the login screen.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem('tnn_token')
+              window.location.reload()
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 text-red-600 font-medium text-sm hover:bg-red-100 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
           </button>
         </div>
       </div>
