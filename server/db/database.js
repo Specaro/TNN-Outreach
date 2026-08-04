@@ -1,7 +1,15 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
-const DB_PATH = path.join(__dirname, '../../tnn_outreach.db');
+// Use persistent volume in production, local file in development
+const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, '../../');
+const DB_PATH = path.join(DATA_DIR, 'tnn_outreach.db');
+
+// Ensure the data directory exists
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
 
 let db;
 
@@ -145,12 +153,12 @@ function seedDefaultSettings() {
     ['smtp_secure', 'false'],
     ['smtp_user', ''],
     ['smtp_pass', ''],
-    ['from_name', 'TNN Staffing Solutions'],
+    ['from_name', 'Total Nurses Network'],
     ['from_email', ''],
-    ['company_name', 'TNN Staffing Solutions'],
-    ['company_phone', ''],
-    ['company_website', ''],
-    ['company_tagline', 'Your Trusted Partner in Healthcare Staffing'],
+    ['company_name', 'Total Nurses Network'],
+    ['company_phone', '1.800.510.8802'],
+    ['company_website', 'https://totalnursesnetwork.com'],
+    ['company_tagline', 'Trusted by Healthcare Professionals'],
   ];
   for (const [key, value] of defaults) {
     insert.run(key, value);
